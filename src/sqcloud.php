@@ -240,11 +240,18 @@
 				$opt = strtolower($option);
 
 				// prefix for certificate options
-				if (strcmp($opt, "root_certificate") == 0 
-				|| strcmp($opt, "certificate") == 0 
-				|| strcmp($opt, "certificate_key") == 0) {
+			if (
+				$opt === "root_certificate"
+				|| $opt === "certificate"
+				|| $opt === "certificate_key"
+			) {
 					$opt = "tls_" . $opt;
 				}
+
+			// alias
+			if ($opt === "nonlinearizable") {
+				$opt = "non_linearizable";
+			}
 
 				if (property_exists($this, $opt)) {
 					if (filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) !== null) {
@@ -360,6 +367,10 @@
 			if ($this->timeout > 0) stream_set_timeout($this->socket, $this->timeout);
 			
 			$buffer = '';
+
+		if ($this->non_linearizable) {
+			$buffer .= "SET CLIENT KEY NONLINEARIZABLE TO 1;";
+		}
 			
 			if ($this->apikey) {
 				$buffer .= "AUTH APIKEY {$this->apikey};";
@@ -383,10 +394,6 @@
 			
 			if ($this->zerotext) {
 				$buffer .= "SET CLIENT KEY ZEROTEXT TO 1;";
-			}
-
-			if ($this->non_linearizable) {
-				$buffer .= "SET CLIENT KEY NONLINEARIZABLE TO 1;";
 			}
 		
 			if ($this->noblob) {
