@@ -1,0 +1,6 @@
+{
+    "php.suggest.basic": false,
+    "phpserver.relativePath": "./admin",
+    "intelephense.environment.phpVersion": "7.0.0",
+    "intelephense.telemetry.enabled": false
+}
