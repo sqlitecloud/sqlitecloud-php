@@ -368,9 +368,10 @@
 			
 			$buffer = '';
 
-		if ($this->non_linearizable) {
-			$buffer .= "SET CLIENT KEY NONLINEARIZABLE TO 1;";
-		}
+			// it must be executed before authentication command
+			if ($this->non_linearizable) {
+				$buffer .= "SET CLIENT KEY NONLINEARIZABLE TO 1;";
+			}
 			
 			if ($this->apikey) {
 				$buffer .= "AUTH APIKEY {$this->apikey};";
