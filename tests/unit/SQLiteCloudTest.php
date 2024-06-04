@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace SQLiteCloud\SQLiteCloud\Tests\Unit;
 
 use PHPUnit\Framework\MockObject\MockObject;

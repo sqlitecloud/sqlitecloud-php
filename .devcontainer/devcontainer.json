@@ -12,11 +12,12 @@
 		"vscode": {
 			"extensions": [
 				"brapifra.phpserver",
-				"emallin.phpunit",
 				"eamodio.gitlens",
 				"junstyle.php-cs-fixer",
 				"hbenl.vscode-test-explorer",
-				"renandelmonico.vscode-php-test-explorer"
+				"renandelmonico.vscode-php-test-explorer",
+				"xdebug.php-debug",
+				"bmewburn.vscode-intelephense-client"
 			]
 		}
 	},

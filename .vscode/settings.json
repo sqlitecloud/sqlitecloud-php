@@ -4,4 +4,5 @@
     "intelephense.environment.phpVersion": "7.0.0",
     "intelephense.telemetry.enabled": false,
     "php-cs-fixer.executablePath": "${workspaceFolder}/vendor/bin/php-cs-fixer",
+    "phpunit.logpanel": true,
 }
