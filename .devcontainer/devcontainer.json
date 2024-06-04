@@ -13,7 +13,9 @@
 			"extensions": [
 				"brapifra.phpserver",
 				"emallin.phpunit",
-				"eamodio.gitlens"
+				"eamodio.gitlens",
+				"recca0120.vscode-phpunit",
+				"junstyle.php-cs-fixer"
 			]
 		}
 	},

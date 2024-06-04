@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-include_once 'src/sqcloud.php';
-
 use PHPUnit\Framework\TestCase;
+use SQLiteCloud\SQLiteCloud;
 
 class SQLiteCloudTest extends TestCase
 {
