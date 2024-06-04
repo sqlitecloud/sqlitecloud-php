@@ -108,13 +108,19 @@ class SQLiteCloudClient
     // PUBLIC
     public function connect($hostname = "localhost", $port = 8860)
     {
+        $this->internalClearError();
+
         $ctx = ($this->insecure) ? 'tcp' : 'tls';
         $address = "{$ctx}://{$hostname}:{$port}";
 
         // check setup context for TLS connection
         $context = null;
         if (!$this->insecure) {
-            $context = stream_context_create();
+            $context = stream_context_create([
+                'ssl' => [
+                    'crypto_method' => STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT,
+                ],
+            ]);
             if ($this->tls_root_certificate) {
                 stream_context_set_option($context, 'ssl', 'cafile', $this->tls_root_certificate);
             }
@@ -227,7 +233,6 @@ class SQLiteCloudClient
 
     public function disconnect()
     {
-        $this->internalClearError();
         if ($this->socket) {
             fclose($this->socket);
         }
@@ -652,27 +657,29 @@ class SQLiteCloudClient
                 //
                 // CMD_ROWSET_CHUNK:    /LEN IDX:VERSION ROWS COLS DATA
                 //
-                $start = $this->internalParseRowsetSignature($buffer, $len, $idx, $version, $nrows, $ncols);
-                if ($start < 0) {
-                    return false;
-                }
+                do {
+                    $hasNextChunk = false;
 
-                // check for end-of-chunk condition
-                if ($start == 0 && $version == 0) {
-                    $rowset = $this->rowset;
-                    $this->rowset = null;
-                    return $rowset;
-                }
-
-                $rowset = $this->internalParseRowset($buffer, $start, $idx, $version, $nrows, $ncols);
-
-                // continue parsing next chunk in the buffer
-                if ($buffer[0] == CMD_ROWSET_CHUNK) {
-                    $buffer = substr($buffer, $len + strlen("/{$len} "));
-                    if ($buffer) {
-                        return $this->internalParseBuffer($buffer, strlen($buffer));
+                    $start = $this->internalParseRowsetSignature($buffer, $len, $idx, $version, $nrows, $ncols);
+                    if ($start < 0) {
+                        return false;
                     }
-                }
+
+                    // check for end-of-chunk condition
+                    if ($start == 0 && $version == 0) {
+                        $rowset = $this->rowset;
+                        $this->rowset = null;
+                        return $rowset;
+                    }
+
+                    $rowset = $this->internalParseRowset($buffer, $start, $idx, $version, $nrows, $ncols);
+
+                    // continue parsing next chunk in the buffer
+                    if ($buffer[0] == CMD_ROWSET_CHUNK) {
+                        $buffer = substr($buffer, $len + strlen("/{$len} "));
+                        $hasNextChunk = (bool) $buffer;
+                    }
+                } while ($hasNextChunk);
 
                 return $rowset;
 

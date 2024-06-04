@@ -1,0 +1,47 @@
+# This workflow will install Composer dependencies,
+# run tests and code quality checks with a variety of PHP versions.
+
+name: Test and QA
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  tests:
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ["7.0", "7.4", "8.3"]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up PHP ${{ matrix.php-version }}
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-version }}
+        tools: composer
+    - name: Install dependencies
+      run: |
+        # Install specific PHP version dependencies
+        composer update
+    - name: Quality Assurance
+      run: |
+        composer cs
+        composer csfixer-ci
+    - name: Tests
+      env:
+        SQLITE_CONNECTION_STRING: ${{ vars.SQLITE_CONNECTION_STRING }}
+        SQLITE_USER: ${{ secrets.SQLITE_USER }}
+        SQLITE_PASSWORD: ${{ secrets.SQLITE_PASSWORD }}
+        SQLITE_API_KEY: ${{ secrets.SQLITE_API_KEY }}
+        SQLITE_HOST: ${{ vars.SQLITE_HOST }}
+        SQLITE_DB: ${{ vars.SQLITE_DB }}
+        SQLITE_PORT: ${{ vars.SQLITE_PORT }}
+      run: |
+        composer test-suite-codecov
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v4.0.1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}

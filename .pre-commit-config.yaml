@@ -1,3 +1,6 @@
+# Pre-Commit
+# https://pre-commit.com
+# Run formatter and more before git commit.
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.3.0
@@ -28,6 +31,5 @@ repos:
         - --warning-severity=0
         - --runtime-set
         - ignore_warnings_on_exit 1
-        files: \.php$
-        exclude: ^admin/
+        - --ignore=^admin/.*$
         require_serial: true
