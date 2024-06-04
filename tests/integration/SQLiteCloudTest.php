@@ -2,8 +2,11 @@
 
 declare(strict_types=1);
 
+namespace SQLiteCloud\SQLiteCloud\Tests\Integration;
+
 use PHPUnit\Framework\TestCase;
-use SQLiteCloud\SQLiteCloud;
+use SQLite3;
+use SQLiteCloud\SQLiteCloud\SQLiteCloudClient;
 
 class SQLiteCloudTest extends TestCase
 {
@@ -14,7 +17,7 @@ class SQLiteCloudTest extends TestCase
 
     private $sqlite;
 
-    protected function tearDown()
+    public function tearDown()
     {
         if ($this->sqlite) {
             $this->sqlite->disconnect();
@@ -22,11 +25,11 @@ class SQLiteCloudTest extends TestCase
     }
 
     /**
-     * @return SQLiteCloud
+     * @return SQLiteCloudClient
      */
     private function getSQLiteConnection()
     {
-        $this->sqlite = new SQLiteCloud();
+        $this->sqlite = new SQLiteCloudClient();
         $this->sqlite->database = getenv('SQLITE_DB');
         $this->sqlite->apikey = getenv('SQLITE_API_KEY');
 
@@ -38,7 +41,7 @@ class SQLiteCloudTest extends TestCase
 
     public function testConnectWithoutCredentialsAndApikey()
     {
-        $sqlite = new SQLiteCloud();
+        $sqlite = new SQLiteCloudClient();
         $sqlite->username = '';
         $sqlite->password = '';
         $sqlite->apikey = '';
@@ -51,7 +54,7 @@ class SQLiteCloudTest extends TestCase
 
     public function testConnect(): void
     {
-        $sqlite = new SQLiteCloud();
+        $sqlite = new SQLiteCloudClient();
         $sqlite->username = getenv('SQLITE_USER');
         $sqlite->password = getenv('SQLITE_PASSWORD');
         $sqlite->database = getenv('SQLITE_DB');
@@ -68,7 +71,7 @@ class SQLiteCloudTest extends TestCase
 
     public function testConnectWithStringWithoutCredentialsAndApikey()
     {
-        $sqlite = new SQLiteCloud();
+        $sqlite = new SQLiteCloudClient();
         $sqlite->username = '';
         $sqlite->password = '';
         $sqlite->apikey = '';
@@ -82,7 +85,7 @@ class SQLiteCloudTest extends TestCase
 
     public function testConnectWithStringWithCredentials(): void
     {
-        $sqlite = new SQLiteCloud();
+        $sqlite = new SQLiteCloudClient();
 
         $result = $sqlite->connectWithString(getenv('SQLITE_CONNECTION_STRING'));
 
@@ -96,7 +99,7 @@ class SQLiteCloudTest extends TestCase
 
     public function testConnectWithStringWithApiKey(): void
     {
-        $sqlite = new SQLiteCloud();
+        $sqlite = new SQLiteCloudClient();
 
         $result = $sqlite->connectWithString(getenv('SQLITE_CONNECTION_STRING') . '?apikey=' . getenv('SQLITE_API_KEY'));
 
@@ -338,7 +341,7 @@ class SQLiteCloudTest extends TestCase
 
     public function testMaxRowsOption()
     {
-        $sqlite = new SQLiteCloud();
+        $sqlite = new SQLiteCloudClient();
         $sqlite->database = getenv('SQLITE_DB');
         $sqlite->apikey = getenv('SQLITE_API_KEY');
         $sqlite->maxrows = 1;
@@ -355,7 +358,7 @@ class SQLiteCloudTest extends TestCase
 
     public function testMaxRowsetOptionToFailWhenRowsetIsBigger()
     {
-        $sqlite = new SQLiteCloud();
+        $sqlite = new SQLiteCloudClient();
         $sqlite->database = getenv('SQLITE_DB');
         $sqlite->apikey = getenv('SQLITE_API_KEY');
         $sqlite->maxrowset = 1024;
@@ -372,7 +375,7 @@ class SQLiteCloudTest extends TestCase
 
     public function testMaxRowsetOptionToSuccedWhenRowsetIsLighter()
     {
-        $sqlite = new SQLiteCloud();
+        $sqlite = new SQLiteCloudClient();
         $sqlite->database = getenv('SQLITE_DB');
         $sqlite->apikey = getenv('SQLITE_API_KEY');
         $sqlite->maxrowset = 1024;
@@ -438,7 +441,7 @@ class SQLiteCloudTest extends TestCase
 
     public function testQueryTimeout()
     {
-        $sqlite = new SQLiteCloud();
+        $sqlite = new SQLiteCloudClient();
         $sqlite->apikey = getenv('SQLITE_API_KEY');
         $sqlite->database = getenv('SQLITE_DB');
         $sqlite->timeout = 1; // 1 sec
@@ -539,7 +542,7 @@ class SQLiteCloudTest extends TestCase
 
     public function testSelectDatabase()
     {
-        $sqlite = new SQLiteCloud();
+        $sqlite = new SQLiteCloudClient();
         $sqlite->apikey = getenv('SQLITE_API_KEY');
         $sqlite->database = '';
 
@@ -673,7 +676,7 @@ class SQLiteCloudTest extends TestCase
 
     public function testCompressionSingleColumn()
     {
-        $sqlite = new SQLiteCloud();
+        $sqlite = new SQLiteCloudClient();
         $sqlite->apikey = getenv('SQLITE_API_KEY');
         $sqlite->database = getenv('SQLITE_DB');
         $sqlite->compression = true;
@@ -684,7 +687,7 @@ class SQLiteCloudTest extends TestCase
         // min compression size for rowset set by default to 20400 bytes
         $blobSize = 20 * 1024;
         $rowset = $sqlite->execute("SELECT hex(randomblob({$blobSize})) AS 'someColumnName'");
-        
+
         $this->assertEmpty($sqlite->errmsg);
         $this->assertSame(1, $rowset->nrows);
         $this->assertSame(1, $rowset->ncols);
@@ -696,7 +699,7 @@ class SQLiteCloudTest extends TestCase
 
     public function testCompressionMultipleColumns()
     {
-        $sqlite = new SQLiteCloud();
+        $sqlite = new SQLiteCloudClient();
         $sqlite->apikey = getenv('SQLITE_API_KEY');
         $sqlite->database = getenv('SQLITE_DB');
         $sqlite->compression = true;
@@ -706,7 +709,7 @@ class SQLiteCloudTest extends TestCase
 
         // min compression size for rowset set by default to 20400 bytes
         $rowset = $sqlite->execute("SELECT * from albums inner join albums a2 on albums.AlbumId = a2.AlbumId");
-        
+
         $this->assertEmpty($sqlite->errmsg);
         $this->assertGreaterThan(0, $rowset->nrows);
         $this->assertGreaterThan(0, $rowset->ncols);

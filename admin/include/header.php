@@ -1,7 +1,7 @@
 <?php
-	include_once('auth.php');
-	include_once('common.php');
-	$page = current_page();
+include_once('auth.php');
+include_once('common.php');
+$page = current_page();
 ?>
 
 <!doctype html>
@@ -30,12 +30,12 @@
 	  }
 	</style>
 
-	
+
 	<!-- Custom styles for this template -->
 	<link href="dashboard.css" rel="stylesheet">
   </head>
   <body>
-	
+
 <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
   <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="http://sqlitecloud.io" target="_blank">SQLite Cloud</a>
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
@@ -165,4 +165,3 @@
 		</ul>
 	  </div>
 	</nav>
-	

@@ -6,7 +6,7 @@
                        http://phpmd.org/xml/ruleset_xml_schema_1.0.0.xsd"
          xsi:noNamespaceSchemaLocation="
                        http://phpmd.org/xml/ruleset_xml_schema_1.0.0.xsd">
-                       
+
   <rule ref="rulesets/codesize.xml" />
   <rule ref="rulesets/cleancode.xml" />
   <rule ref="rulesets/controversial.xml" />
