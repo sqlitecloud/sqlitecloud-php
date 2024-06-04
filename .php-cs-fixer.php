@@ -8,7 +8,9 @@ return (new PhpCsFixer\Config())
     ->setRules([
         '@PSR12' => true,
         // PHP >= 7.1 required for const
-        'visibility_required' => ['property', 'method'],
-        ])
+        'visibility_required' => [
+            'elements' => ['property', 'method']
+        ],
+    ])
     ->setFinder($finder)
 ;
