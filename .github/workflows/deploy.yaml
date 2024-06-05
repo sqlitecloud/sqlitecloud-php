@@ -27,6 +27,8 @@ jobs:
         # Install specific PHP version dependencies
         composer update
     - name: Quality Assurance
+      # only in the minimum supported version
+      if: matrix.php-version == '7.0'
       run: |
         composer cs
         composer csfixer-ci
