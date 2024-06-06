@@ -1,0 +1,29 @@
+# Create an incremental tag on Github using SemVer https://semver.org: x.y.z
+
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      choice:
+        type: choice
+        description: Release type
+        options:
+        - patch (x.y.Z)
+        - minor (x.Y.z)
+        - major (X.y.z)
+
+jobs:
+  release:
+    # if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    name: Tag for release
+
+    steps:
+      - name: Create tag as version for package on Packagist.org
+        id: create-tag
+        uses: GregoryGost/version-tagger@v1.0.3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          uselasttag: true
+          releasetype: ${{ inputs.choice }}
