@@ -1,6 +1,8 @@
 <?php
 
-use SQLiteCloud;
+require_once __DIR__ . '/../bootstrap.php';
+
+use SQLiteCloud\SQLiteCloudClient;
 
 ini_set('display_startup_errors', 1);
 ini_set('display_errors', 1);
@@ -14,7 +16,7 @@ if (session_status() === PHP_SESSION_NONE) {
 function do_real_connect($hostname, $port, $username, $password)
 {
     global $sqlitecloud;
-    $sqlitecloud = new SQLiteCloud();
+    $sqlitecloud = new SQLiteCloudClient();
     $sqlitecloud->username = $username;
     $sqlitecloud->password = $password;
     if (file_exists('assets/ca.pem')) {

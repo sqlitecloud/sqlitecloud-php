@@ -1,5 +1,7 @@
 <?php
 
+use SQLiteCloud\SQLiteCloudRowset;
+
 include_once('auth.php');
 include_once('common.php');
 
@@ -11,15 +13,15 @@ $r = null;
 $rc = exec_sql($database, $sql);
 
 if ($rc === false) {
-    $r = array('result' => 0, 'msg' => exec_lasterror(true));
+    $r = ['result' => 0, 'msg' => exec_lasterror(true)];
 } elseif ($rc instanceof SQLiteCloudRowset) {
-    $r = array('result' => 2, 'msg' => render_console_table($rc));
+    $r = ['result' => 2, 'msg' => render_console_table($rc)];
 } elseif ($rc === true) {
-    $r = array('result' => 1, 'msg' => 'Query succesfully executed.');
+    $r = ['result' => 1, 'msg' => 'Query succesfully executed.'];
 } elseif ($rc === null) {
-    $r = array('result' => 1, 'msg' => 'NULL');
+    $r = ['result' => 1, 'msg' => 'NULL'];
 } else {
-    $r = array('result' => 1, 'msg' => $rc);
+    $r = ['result' => 1, 'msg' => $rc];
 }
 
 echo json_encode($r);

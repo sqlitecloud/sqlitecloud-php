@@ -5,12 +5,9 @@
 </p>
 
 
-**TODO**
-<!-- ![Build Status](https://github.com/sqlitecloud/sqlitecloud-py/actions/workflows/deploy.yaml/badge.svg "Build Status")
-[![codecov](https://codecov.io/github/sqlitecloud/python/graph/badge.svg?token=38G6FGOWKP)](https://codecov.io/github/sqlitecloud/python)
-![PyPI - Version](https://img.shields.io/pypi/v/sqlitecloud?link=https%3A%2F%2Fpypi.org%2Fproject%2FSqliteCloud%2F)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/sqlitecloud?link=https%3A%2F%2Fpypi.org%2Fproject%2FSqliteCloud%2F)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/sqlitecloud?link=https%3A%2F%2Fpypi.org%2Fproject%2FSqliteCloud%2F) -->
+[![Test and QA](https://github.com/sqlitecloud/sqlitecloud-php/actions/workflows/deploy.yaml/badge.svg?branch=main)](https://github.com/sqlitecloud/sqlitecloud-php/actions/workflows/deploy.yaml)
+[![codecov](https://codecov.io/gh/sqlitecloud/sqlitecloud-php/graph/badge.svg?token=3FFHULGCOY)](https://codecov.io/gh/sqlitecloud/sqlitecloud-php)
+![PHP](https://img.shields.io/packagist/dependency-v/sqlitecloud/sqlitecloud/php)
 
 
 - [Driver for SQLite Cloud](#driver-for-sqlite-cloud)
@@ -32,7 +29,8 @@ $ composer install sqlitecloud/sqlitecloud
 ```
 
 ```php
-use SQLiteCloud;
+use use SQLiteCloud\SQLiteCloudClient;
+use SQLiteCloud\SQLiteCloudRowset;
 
 # Open the connection to SQLite Cloud
 $sqlite = new SQLiteCloud();
