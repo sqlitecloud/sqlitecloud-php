@@ -7,7 +7,10 @@
 
 [![Test and QA](https://github.com/sqlitecloud/sqlitecloud-php/actions/workflows/deploy.yaml/badge.svg?branch=main)](https://github.com/sqlitecloud/sqlitecloud-php/actions/workflows/deploy.yaml)
 [![codecov](https://codecov.io/gh/sqlitecloud/sqlitecloud-php/graph/badge.svg?token=3FFHULGCOY)](https://codecov.io/gh/sqlitecloud/sqlitecloud-php)
-![PHP](https://img.shields.io/packagist/dependency-v/sqlitecloud/sqlitecloud/php)
+[![Packagist Version](https://img.shields.io/packagist/v/sqlitecloud/sqlitecloud)](https://packagist.org/packages/sqlitecloud/sqlitecloud)
+[![PHP](https://img.shields.io/packagist/dependency-v/sqlitecloud/sqlitecloud/php)](https://packagist.org/packages/sqlitecloud/sqlitecloud)
+[![Downloads](https://img.shields.io/packagist/dt/sqlitecloud/sqlitecloud)](https://packagist.org/packages/sqlitecloud/sqlitecloud)
+
 
 
 - [Driver for SQLite Cloud](#driver-for-sqlite-cloud)
@@ -18,7 +21,7 @@
 [SQLite Cloud](https://sqlitecloud.io) is a powerful Python package that allows you to interact with the SQLite Cloud database seamlessly. It provides methods for various database operations. This package is designed to simplify database operations in PHP applications, making it easier than ever to work with SQLite Cloud.
 
 
-- Documentation: [https://docs.sqlitecloud.io/docs/sdk/php/admin](https://docs.sqlitecloud.io/docs/sdk/php/admin)
+- Documentation: [https://docs.sqlitecloud.io/docs/sdk/php](https://docs.sqlitecloud.io/docs/sdk/php/connect)
 - Source: [https://github.com/sqlitecloud/sqlitecloud-php](https://github.com/sqlitecloud/sqlitecloud-php)
 - Site: [https://sqlitecloud.io](https://sqlitecloud.io/developers)
 
@@ -29,6 +32,8 @@ $ composer install sqlitecloud/sqlitecloud
 ```
 
 ```php
+<?php
+
 use SQLiteCloud\SQLiteCloudClient;
 use SQLiteCloud\SQLiteCloudRowset;
 
