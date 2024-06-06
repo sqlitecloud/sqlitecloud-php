@@ -29,11 +29,11 @@ $ composer install sqlitecloud/sqlitecloud
 ```
 
 ```php
-use use SQLiteCloud\SQLiteCloudClient;
+use SQLiteCloud\SQLiteCloudClient;
 use SQLiteCloud\SQLiteCloudRowset;
 
 # Open the connection to SQLite Cloud
-$sqlite = new SQLiteCloud();
+$sqlite = new SQLiteCloudClient();
 $sqlite->connectWithString('sqlitecloud://myhost.sqlite.cloud:8860?apikey=myapikey');
 
 # You can autoselect the database during the connect call
