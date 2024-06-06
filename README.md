@@ -28,32 +28,36 @@
 ## Example
 
 ```bash
-$ composer install sqlitecloud/sqlitecloud
+$ composer require sqlitecloud/sqlitecloud
 ```
 
 ```php
 <?php
 
+require_once 'vendor/autoload.php';
+
 use SQLiteCloud\SQLiteCloudClient;
 use SQLiteCloud\SQLiteCloudRowset;
 
-# Open the connection to SQLite Cloud
+// Open the connection to SQLite Cloud
 $sqlite = new SQLiteCloudClient();
 $sqlite->connectWithString('sqlitecloud://myhost.sqlite.cloud:8860?apikey=myapikey');
 
-# You can autoselect the database during the connect call
-# by adding the database name as path of the SQLite Cloud
-# connection string, eg:
-# $sqlite->connectWithString("sqlitecloud://myhost.sqlite.cloud:8860/mydatabase?apikey=myapikey");
+// You can autoselect the database during the connect call
+// by adding the database name as path of the SQLite Cloud
+// connection string, eg:
+// $sqlite->connectWithString("sqlitecloud://myhost.sqlite.cloud:8860/mydatabase?apikey=myapikey");
 $db_name = 'chinook.sqlite';
 $sqlite->execute("USE DATABASE {$db_name}");
 
  /** @var SQLiteCloudRowset */
-$rowset = $sqlite->execute('SELECT * FROM albums WHERE AlbumId = 1');
+$rowset = $sqlite->execute('SELECT * FROM albums WHERE ArtistId = 2');
 
-print('First colum, first row: ' . $rowset->value(0, 0));
-print('Second colum, first row: ' . $rowset->value(0, 1));
-print('column name: ' . $rowset->name(1));
+printf('%d rows' . PHP_EOL, $rowset->nrows);
+printf('%s | %s | %s' . PHP_EOL, $rowset->name(0), $rowset->name(1), $rowset->name(2));
+for ($i = 0; $i < $rowset->nrows; $i++) {
+  printf('%s | %s | %s' . PHP_EOL, $rowset->value($i, 0), $rowset->value($i, 1), $rowset->value($i, 2));
+}
 
-$sqlite->disconnect()
+$sqlite->disconnect();
 ```
