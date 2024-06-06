@@ -1,10 +1,10 @@
 <?php
 
-namespace SQLiteCloud\SQLiteCloud\Tests\Unit;
+namespace SQLiteCloud\Tests\Unit;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use SQLiteCloud\SQLiteCloud\SQLiteCloudClient;
+use SQLiteCloud\SQLiteCloudClient;
 
 class SQLiteCloudTest extends TestCase
 {

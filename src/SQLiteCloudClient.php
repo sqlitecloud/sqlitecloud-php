@@ -27,7 +27,7 @@
 // v1.1.0: added new rowset metadata v2
 //         removed ACK for rowset sent in chunk
 
-namespace SQLiteCloud\SQLiteCloud;
+namespace SQLiteCloud;
 
 const CMD_STRING = '+';
 const CMD_ZEROSTRING = '!';

@@ -1,6 +1,6 @@
 <?php
 
-namespace SQLiteCloud\SQLiteCloud;
+namespace SQLiteCloud;
 
 class SQLiteCloudRowset
 {

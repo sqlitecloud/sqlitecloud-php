@@ -32,7 +32,7 @@ $ composer install sqlitecloud/sqlitecloud
 ```
 
 ```php
-use SQLiteCloud\SQLiteCloud;
+use SQLiteCloud;
 
 # Open the connection to SQLite Cloud
 $sqlite = new SQLiteCloud();

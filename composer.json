@@ -5,12 +5,13 @@
     "license": "MIT",
     "keywords": [
         "sqlitecloud",
-        "sqlite"
+        "sqlite",
+        "database"
     ],
     "homepage": "https://sqlitecloud.io/",
     "autoload": {
         "psr-4": {
-            "SQLiteCloud\\SQLiteCloud\\": "src/"
+            "SQLiteCloud\\": "src/"
         }
     },
     "minimum-stability": "alpha",
