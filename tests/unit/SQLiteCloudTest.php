@@ -1,19 +1,17 @@
 <?php
 
-declare(strict_types=1);
-
-include_once 'src/sqcloud.php';
+namespace SQLiteCloud\Tests\Unit;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-
+use SQLiteCloud\SQLiteCloudClient;
 
 class SQLiteCloudTest extends TestCase
 {
     public function testConnectWithStringWithPort()
     {
-        /** @var MockObject|SQLiteCloud */
-        $sqlite = $this->getMockBuilder(SQLiteCloud::class)
+        /** @var MockObject|SQLiteCloudClient */
+        $sqlite = $this->getMockBuilder(SQLiteCloudClient::class)
             ->setMethods(['connect'])
             ->getMock();
 
@@ -29,8 +27,8 @@ class SQLiteCloudTest extends TestCase
 
     public function testConnectWithStringWithBothApiKeyAndCredentials()
     {
-        /** @var MockObject|SQLiteCloud */
-        $sqlite = $this->getMockBuilder(SQLiteCloud::class)
+        /** @var MockObject|SQLiteCloudClient */
+        $sqlite = $this->getMockBuilder(SQLiteCloudClient::class)
             ->setMethods(['connect'])
             ->getMock();
 
@@ -49,8 +47,8 @@ class SQLiteCloudTest extends TestCase
 
     public function testConnectWithStringWithOptions()
     {
-        /** @var MockObject|SQLiteCloud */
-        $sqlite = $this->getMockBuilder(SQLiteCloud::class)
+        /** @var MockObject|SQLiteCloudClient */
+        $sqlite = $this->getMockBuilder(SQLiteCloudClient::class)
             ->setMethods(['connect'])
             ->getMock();
 
@@ -71,8 +69,8 @@ class SQLiteCloudTest extends TestCase
 
     public function testConnectWithStringWithoutOptionals()
     {
-        /** @var MockObject|SQLiteCloud */
-        $sqlite = $this->getMockBuilder(SQLiteCloud::class)
+        /** @var MockObject|SQLiteCloudClient */
+        $sqlite = $this->getMockBuilder(SQLiteCloudClient::class)
             ->setMethods(['connect'])
             ->getMock();
 
@@ -118,8 +116,8 @@ class SQLiteCloudTest extends TestCase
      */
     public function testParameterToBeSet(string $param, $value, string $paramAlias = null)
     {
-        /** @var MockObject|SQLiteCloud */
-        $sqlite = $this->getMockBuilder(SQLiteCloud::class)
+        /** @var MockObject|SQLiteCloudClient */
+        $sqlite = $this->getMockBuilder(SQLiteCloudClient::class)
             ->setMethods(['connect'])
             ->getMock();
 
@@ -140,8 +138,8 @@ class SQLiteCloudTest extends TestCase
 
     public function testTlsParameters()
     {
-        /** @var MockObject|SQLiteCloud */
-        $sqlite = $this->getMockBuilder(SQLiteCloud::class)
+        /** @var MockObject|SQLiteCloudClient */
+        $sqlite = $this->getMockBuilder(SQLiteCloudClient::class)
             ->setMethods(['connect'])
             ->getMock();
 

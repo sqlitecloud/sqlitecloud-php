@@ -6,6 +6,6 @@ use Dotenv\Dotenv;
 
 $dotenv = Dotenv::createImmutable(__DIR__);
 
-foreach ($dotenv->load() as $key => $value) {
+foreach ($dotenv->safeLoad() as $key => $value) {
     putenv("$key=$value");
 }

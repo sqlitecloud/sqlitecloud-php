@@ -1,10 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
-include_once 'src/sqcloud.php';
+namespace SQLiteCloud\Tests\Integration;
 
 use PHPUnit\Framework\TestCase;
+use SQLite3;
+use SQLiteCloud\SQLiteCloudClient;
 
 class SQLiteCloudTest extends TestCase
 {
@@ -13,33 +13,24 @@ class SQLiteCloudTest extends TestCase
     /** Will except queries to be quicker than this */
     const EXPECT_SPEED_MS = 6 * 1000;
 
-    private $sqlite;
-
-    protected function tearDown()
-    {
-        if ($this->sqlite) {
-            $this->sqlite->disconnect();
-        }
-    }
-
     /**
-     * @return SQLiteCloud
+     * @return SQLiteCloudClient
      */
     private function getSQLiteConnection()
     {
-        $this->sqlite = new SQLiteCloud();
-        $this->sqlite->database = getenv('SQLITE_DB');
-        $this->sqlite->apikey = getenv('SQLITE_API_KEY');
+        $sqlite = new SQLiteCloudClient();
+        $sqlite->database = getenv('SQLITE_DB');
+        $sqlite->apikey = getenv('SQLITE_API_KEY');
 
-        $result = $this->sqlite->connect(getenv('SQLITE_HOST'));
+        $result = $sqlite->connect(getenv('SQLITE_HOST'));
         $this->assertTrue($result);
 
-        return $this->sqlite;
+        return $sqlite;
     }
 
     public function testConnectWithoutCredentialsAndApikey()
     {
-        $sqlite = new SQLiteCloud();
+        $sqlite = new SQLiteCloudClient();
         $sqlite->username = '';
         $sqlite->password = '';
         $sqlite->apikey = '';
@@ -50,9 +41,9 @@ class SQLiteCloudTest extends TestCase
         $this->assertFalse($result);
     }
 
-    public function testConnect(): void
+    public function testConnect()
     {
-        $sqlite = new SQLiteCloud();
+        $sqlite = new SQLiteCloudClient();
         $sqlite->username = getenv('SQLITE_USER');
         $sqlite->password = getenv('SQLITE_PASSWORD');
         $sqlite->database = getenv('SQLITE_DB');
@@ -69,7 +60,7 @@ class SQLiteCloudTest extends TestCase
 
     public function testConnectWithStringWithoutCredentialsAndApikey()
     {
-        $sqlite = new SQLiteCloud();
+        $sqlite = new SQLiteCloudClient();
         $sqlite->username = '';
         $sqlite->password = '';
         $sqlite->apikey = '';
@@ -81,9 +72,9 @@ class SQLiteCloudTest extends TestCase
         $sqlite->disconnect();
     }
 
-    public function testConnectWithStringWithCredentials(): void
+    public function testConnectWithStringWithCredentials()
     {
-        $sqlite = new SQLiteCloud();
+        $sqlite = new SQLiteCloudClient();
 
         $result = $sqlite->connectWithString(getenv('SQLITE_CONNECTION_STRING'));
 
@@ -95,9 +86,9 @@ class SQLiteCloudTest extends TestCase
         $sqlite->disconnect();
     }
 
-    public function testConnectWithStringWithApiKey(): void
+    public function testConnectWithStringWithApiKey()
     {
-        $sqlite = new SQLiteCloud();
+        $sqlite = new SQLiteCloudClient();
 
         $result = $sqlite->connectWithString(getenv('SQLITE_CONNECTION_STRING') . '?apikey=' . getenv('SQLITE_API_KEY'));
 
@@ -116,6 +107,8 @@ class SQLiteCloudTest extends TestCase
         /** @var SQLiteCloudRowset */
         $rowset = $sqlite->execute('SELECT AlbumId FROM albums LIMIT 2');
 
+        $sqlite->disconnect();
+
         $this->assertSame(2, $rowset->nrows);
         $this->assertSame(1, $rowset->ncols);
         $this->assertSame(2, $rowset->version);
@@ -127,6 +120,8 @@ class SQLiteCloudTest extends TestCase
 
         /** @var SQLiteCloudRowset */
         $rowset = $sqlite->execute('SELECT * FROM albums');
+
+        $sqlite->disconnect();
 
         $this->assertSame('1', $rowset->value(0, 0));
         $this->assertSame('For Those About To Rock We Salute You', $rowset->value(0, 1));
@@ -140,6 +135,8 @@ class SQLiteCloudTest extends TestCase
         /** @var SQLiteCloudRowset */
         $rowset = $sqlite->execute("SELECT 'Minha História'");
 
+        $sqlite->disconnect();
+
         $this->assertSame('Minha História', $rowset->value(0, 0));
         $this->assertSame("'Minha História'", $rowset->name(0));
     }
@@ -148,6 +145,8 @@ class SQLiteCloudTest extends TestCase
     {
         $sqlite = $this->getSQLiteConnection();
         $rowset = $sqlite->execute("SELECT not_a_column FROM albums");
+
+        $sqlite->disconnect();
 
         $this->assertFalse($rowset);
         $this->assertSame(1, $sqlite->errcode);
@@ -161,6 +160,8 @@ class SQLiteCloudTest extends TestCase
         /** @var SQLiteCloudRowset */
         $rowset = $sqlite->execute("SELECT 'one row'");
 
+        $sqlite->disconnect();
+
         $this->assertNull($rowset->value(1, 1));
     }
 
@@ -170,6 +171,8 @@ class SQLiteCloudTest extends TestCase
 
         /** @var SQLiteCloudRowset */
         $rowset = $sqlite->execute('SELECT * FROM albums');
+
+        $sqlite->disconnect();
 
         $this->assertSame('AlbumId', $rowset->name(0));
         $this->assertSame('Title', $rowset->name(1));
@@ -181,6 +184,8 @@ class SQLiteCloudTest extends TestCase
 
         /** @var SQLiteCloudRowset */
         $rowset = $sqlite->execute('SELECT AlbumId FROM albums');
+
+        $sqlite->disconnect();
 
         $this->assertNull($rowset->name(1));
     }
@@ -199,6 +204,8 @@ class SQLiteCloudTest extends TestCase
         }
         $rowset = $sqlite->execute("SELECT '{$value}' 'VALUE'");
 
+        $sqlite->disconnect();
+
         $this->assertEmpty($sqlite->errmsg);
         $this->assertNotFalse($rowset);
         $this->assertSame(0, $sqlite->errcode);
@@ -213,6 +220,8 @@ class SQLiteCloudTest extends TestCase
     {
         $sqlite = $this->getSQLiteConnection();
         $rowset = $sqlite->execute('TEST INTEGER');
+        $sqlite->disconnect();
+
         $this->assertEmpty($sqlite->errmsg);
         $this->assertSame(123456, $rowset);
     }
@@ -221,6 +230,8 @@ class SQLiteCloudTest extends TestCase
     {
         $sqlite = $this->getSQLiteConnection();
         $rowset = $sqlite->execute('TEST FLOAT');
+        $sqlite->disconnect();
+
         $this->assertEmpty($sqlite->errmsg);
         $this->assertSame(3.1415926, $rowset);
     }
@@ -229,6 +240,8 @@ class SQLiteCloudTest extends TestCase
     {
         $sqlite = $this->getSQLiteConnection();
         $rowset = $sqlite->execute('TEST STRING');
+        $sqlite->disconnect();
+
         $this->assertEmpty($sqlite->errmsg);
         $this->assertSame('Hello World, this is a test string.', $rowset);
     }
@@ -237,6 +250,8 @@ class SQLiteCloudTest extends TestCase
     {
         $sqlite = $this->getSQLiteConnection();
         $rowset = $sqlite->execute('TEST ZERO_STRING');
+        $sqlite->disconnect();
+
         $this->assertEmpty($sqlite->errmsg);
         $this->assertSame('Hello World, this is a zero-terminated test string.', $rowset);
     }
@@ -245,6 +260,8 @@ class SQLiteCloudTest extends TestCase
     {
         $sqlite = $this->getSQLiteConnection();
         $rowset = $sqlite->execute('TEST STRING0');
+        $sqlite->disconnect();
+
         $this->assertEmpty($sqlite->errmsg);
         $this->assertSame('', $rowset);
     }
@@ -253,6 +270,8 @@ class SQLiteCloudTest extends TestCase
     {
         $sqlite = $this->getSQLiteConnection();
         $rowset = $sqlite->execute('TEST COMMAND');
+        $sqlite->disconnect();
+
         $this->assertEmpty($sqlite->errmsg);
         $this->assertSame('PONG', $rowset);
     }
@@ -261,6 +280,8 @@ class SQLiteCloudTest extends TestCase
     {
         $sqlite = $this->getSQLiteConnection();
         $rowset = $sqlite->execute('TEST JSON');
+        $sqlite->disconnect();
+
         $this->assertEmpty($sqlite->errmsg);
         $this->assertJson($rowset);
         $this->assertEquals(
@@ -283,6 +304,8 @@ class SQLiteCloudTest extends TestCase
     {
         $sqlite = $this->getSQLiteConnection();
         $rowset = $sqlite->execute('TEST BLOB');
+        $sqlite->disconnect();
+
         $this->assertEmpty($sqlite->errmsg);
         $this->assertSame(1000, strlen($rowset));
     }
@@ -291,6 +314,8 @@ class SQLiteCloudTest extends TestCase
     {
         $sqlite = $this->getSQLiteConnection();
         $rowset = $sqlite->execute('TEST BLOB0');
+        $sqlite->disconnect();
+
         $this->assertEmpty($sqlite->errmsg);
         $this->assertSame(0, strlen($rowset));
     }
@@ -299,6 +324,8 @@ class SQLiteCloudTest extends TestCase
     {
         $sqlite = $this->getSQLiteConnection();
         $rowset = $sqlite->execute('TEST ERROR');
+        $sqlite->disconnect();
+
         $this->assertSame(66666, $sqlite->errcode);
         $this->assertSame('This is a test error message with a devil error code.', $sqlite->errmsg);
     }
@@ -306,7 +333,9 @@ class SQLiteCloudTest extends TestCase
     public function testExtError()
     {
         $sqlite = $this->getSQLiteConnection();
-        $rowset = $sqlite->execute('TEST EXTERROR');
+        $sqlite->execute('TEST EXTERROR');
+        $sqlite->disconnect();
+
         $this->assertSame(66666, $sqlite->errcode);
         $this->assertSame(333, $sqlite->xerrcode);
         $this->assertSame('This is a test error message with an extcode and a devil error code.', $sqlite->errmsg);
@@ -316,6 +345,8 @@ class SQLiteCloudTest extends TestCase
     {
         $sqlite = $this->getSQLiteConnection();
         $rowset = $sqlite->execute('TEST ARRAY');
+        $sqlite->disconnect();
+
         $this->assertEmpty($sqlite->errmsg);
         $this->assertTrue(is_array($rowset));
         $this->assertCount(5, $rowset);
@@ -329,6 +360,8 @@ class SQLiteCloudTest extends TestCase
     {
         $sqlite = $this->getSQLiteConnection();
         $rowset = $sqlite->execute('TEST ROWSET');
+        $sqlite->disconnect();
+
         $this->assertEmpty($sqlite->errmsg);
         $this->assertGreaterThanOrEqual(30, $rowset->nrows);
         $this->assertSame(2, $rowset->ncols);
@@ -339,7 +372,7 @@ class SQLiteCloudTest extends TestCase
 
     public function testMaxRowsOption()
     {
-        $sqlite = new SQLiteCloud();
+        $sqlite = new SQLiteCloudClient();
         $sqlite->database = getenv('SQLITE_DB');
         $sqlite->apikey = getenv('SQLITE_API_KEY');
         $sqlite->maxrows = 1;
@@ -348,15 +381,15 @@ class SQLiteCloudTest extends TestCase
         $this->assertTrue($result);
 
         $rowset = $sqlite->execute('SELECT * FROM albums');
+        $sqlite->disconnect();
+
         $this->assertNotFalse($rowset);
         $this->assertGreaterThan(100, $rowset->nrows);
-
-        $sqlite->disconnect();
     }
 
     public function testMaxRowsetOptionToFailWhenRowsetIsBigger()
     {
-        $sqlite = new SQLiteCloud();
+        $sqlite = new SQLiteCloudClient();
         $sqlite->database = getenv('SQLITE_DB');
         $sqlite->apikey = getenv('SQLITE_API_KEY');
         $sqlite->maxrowset = 1024;
@@ -365,15 +398,15 @@ class SQLiteCloudTest extends TestCase
         $this->assertTrue($result);
 
         $rowset = $sqlite->execute('SELECT * FROM albums');
+        $sqlite->disconnect();
+
         $this->assertFalse($rowset);
         $this->assertSame('RowSet too big to be sent (limit set to 1024 bytes).', $sqlite->errmsg);
-
-        $sqlite->disconnect();
     }
 
     public function testMaxRowsetOptionToSuccedWhenRowsetIsLighter()
     {
-        $sqlite = new SQLiteCloud();
+        $sqlite = new SQLiteCloudClient();
         $sqlite->database = getenv('SQLITE_DB');
         $sqlite->apikey = getenv('SQLITE_API_KEY');
         $sqlite->maxrowset = 1024;
@@ -382,16 +415,18 @@ class SQLiteCloudTest extends TestCase
         $this->assertTrue($result);
 
         $rowset = $sqlite->execute("SELECT 'hello world'");
+        $sqlite->disconnect();
+
         $this->assertNotFalse($rowset);
         $this->assertSame(1, $rowset->nrows);
-
-        $sqlite->disconnect();
     }
 
     public function testChunckedRowset()
     {
         $sqlite = $this->getSQLiteConnection();
         $rowset = $sqlite->execute('TEST ROWSET_CHUNK');
+        $sqlite->disconnect();
+
         $this->assertEmpty($sqlite->errmsg);
         $this->assertSame(147, $rowset->nrows);
         $this->assertSame(1, $rowset->ncols);
@@ -416,6 +451,8 @@ class SQLiteCloudTest extends TestCase
         $rowset = $sqlite->execute('SELECT 1');
         $this->assertEmpty($sqlite->errmsg);
         $this->assertSame(1, $rowset->nrows);
+
+        $sqlite->disconnect();
     }
 
     public function testSerializedOperations()
@@ -435,11 +472,20 @@ class SQLiteCloudTest extends TestCase
             $this->assertSame("{$i}", $rowset->value(0, 0));
             $this->assertTrue(in_array($rowset->version, [1, 2]));
         }
+
+        $sqlite->disconnect();
     }
 
+    /**
+     * @requires PHP >= 7.1
+     */
     public function testQueryTimeout()
     {
-        $sqlite = new SQLiteCloud();
+        if (version_compare(PHP_VERSION, '7.1', '<')) {
+            $this->markTestSkipped('PHP 7.0 does not respect the socket timeout. It could be an issue to be investigated.');
+        }
+
+        $sqlite = new SQLiteCloudClient();
         $sqlite->apikey = getenv('SQLITE_API_KEY');
         $sqlite->database = getenv('SQLITE_DB');
         $sqlite->timeout = 1; // 1 sec
@@ -480,6 +526,8 @@ class SQLiteCloudTest extends TestCase
             $this->assertSame(1, $rowset->ncols);
             $this->assertGreaterThanOrEqual(strlen($longSql) - 50, $rowset->value(0, 0));
         }
+
+        $sqlite->disconnect();
     }
 
     /**
@@ -499,6 +547,7 @@ class SQLiteCloudTest extends TestCase
         $longSql = "SELECT '{$selectedValue}'";
 
         $rowset = $sqlite->execute($longSql);
+        $sqlite->disconnect();
 
         $this->assertSame(1, $rowset->nrows);
         $this->assertSame(1, $rowset->ncols);
@@ -509,6 +558,8 @@ class SQLiteCloudTest extends TestCase
     {
         $sqlite = $this->getSQLiteConnection();
         $rowset = $sqlite->execute('LIST METADATA');
+        $sqlite->disconnect();
+
         $this->assertEmpty($sqlite->errmsg);
         $this->assertGreaterThanOrEqual(32, $rowset->nrows);
         $this->assertSame(8, $rowset->ncols);
@@ -518,6 +569,8 @@ class SQLiteCloudTest extends TestCase
     {
         $sqlite = $this->getSQLiteConnection();
         $rowset = $sqlite->execute("SELECT 42, 'hello'");
+        $sqlite->disconnect();
+
         $this->assertEmpty($sqlite->errmsg);
         $this->assertSame(1, $rowset->nrows);
         $this->assertSame(2, $rowset->ncols);
@@ -531,6 +584,8 @@ class SQLiteCloudTest extends TestCase
     {
         $sqlite = $this->getSQLiteConnection();
         $rowset = $sqlite->execute("USE DATABASE :memory:; SELECT '" . str_repeat('x', 1000) . "' AS DDD");
+        $sqlite->disconnect();
+
         $this->assertEmpty($sqlite->errmsg);
         $this->assertSame(1, $rowset->nrows);
         $this->assertSame(1, $rowset->ncols);
@@ -540,22 +595,25 @@ class SQLiteCloudTest extends TestCase
 
     public function testSelectDatabase()
     {
-        $sqlite = new SQLiteCloud();
+        $sqlite = new SQLiteCloudClient();
         $sqlite->apikey = getenv('SQLITE_API_KEY');
         $sqlite->database = '';
 
         $sqlite->connect(getenv('SQLITE_HOST'));
 
-        $rowset = $sqlite->execute('USE DATABASE chinook.sqlite');
+        $result = $sqlite->execute('USE DATABASE chinook.sqlite');
+        $sqlite->disconnect();
+
         $this->assertEmpty($sqlite->errmsg);
-        $this->assertEmpty($rowset->nrows);
-        $this->assertEmpty($rowset->ncols);
+        $this->assertTrue($result);
     }
 
     public function testSelectTracksWithoutLimit()
     {
         $sqlite = $this->getSQLiteConnection();
         $rowset = $sqlite->execute('SELECT * FROM tracks');
+        $sqlite->disconnect();
+
         $this->assertEmpty($sqlite->errmsg);
         $this->assertGreaterThanOrEqual(3000, $rowset->nrows);
         $this->assertSame(9, $rowset->ncols);
@@ -565,6 +623,8 @@ class SQLiteCloudTest extends TestCase
     {
         $sqlite = $this->getSQLiteConnection();
         $rowset = $sqlite->execute('SELECT * FROM tracks LIMIT 10;');
+        $sqlite->disconnect();
+
         $this->assertEmpty($sqlite->errmsg);
         $this->assertSame(10, $rowset->nrows);
         $this->assertSame(9, $rowset->ncols);
@@ -593,6 +653,7 @@ class SQLiteCloudTest extends TestCase
                 }
             }
         }
+        $sqlite->disconnect();
     }
 
     /**
@@ -618,6 +679,7 @@ class SQLiteCloudTest extends TestCase
                 }
             }
         }
+        $sqlite->disconnect();
     }
 
     /**
@@ -645,6 +707,7 @@ class SQLiteCloudTest extends TestCase
                 }
             }
         }
+        $sqlite->disconnect();
     }
 
     public function testDownloadDatabase()
@@ -664,6 +727,8 @@ class SQLiteCloudTest extends TestCase
         $tempFile = tempnam(sys_get_temp_dir(), 'chinook');
         file_put_contents($tempFile, $data);
 
+        $sqlite->disconnect();
+
         $db = new SQLite3($tempFile);
         $rowset = $db->query('SELECT * from albums');
 
@@ -674,7 +739,7 @@ class SQLiteCloudTest extends TestCase
 
     public function testCompressionSingleColumn()
     {
-        $sqlite = new SQLiteCloud();
+        $sqlite = new SQLiteCloudClient();
         $sqlite->apikey = getenv('SQLITE_API_KEY');
         $sqlite->database = getenv('SQLITE_DB');
         $sqlite->compression = true;
@@ -685,19 +750,18 @@ class SQLiteCloudTest extends TestCase
         // min compression size for rowset set by default to 20400 bytes
         $blobSize = 20 * 1024;
         $rowset = $sqlite->execute("SELECT hex(randomblob({$blobSize})) AS 'someColumnName'");
-        
+        $sqlite->disconnect();
+
         $this->assertEmpty($sqlite->errmsg);
         $this->assertSame(1, $rowset->nrows);
         $this->assertSame(1, $rowset->ncols);
         $this->assertSame("someColumnName", $rowset->name(0));
         $this->assertSame($blobSize * 2, strlen($rowset->value(0, 0)));
-
-        $sqlite->disconnect();
     }
 
     public function testCompressionMultipleColumns()
     {
-        $sqlite = new SQLiteCloud();
+        $sqlite = new SQLiteCloudClient();
         $sqlite->apikey = getenv('SQLITE_API_KEY');
         $sqlite->database = getenv('SQLITE_DB');
         $sqlite->compression = true;
@@ -707,12 +771,11 @@ class SQLiteCloudTest extends TestCase
 
         // min compression size for rowset set by default to 20400 bytes
         $rowset = $sqlite->execute("SELECT * from albums inner join albums a2 on albums.AlbumId = a2.AlbumId");
-        
+        $sqlite->disconnect();
+
         $this->assertEmpty($sqlite->errmsg);
         $this->assertGreaterThan(0, $rowset->nrows);
         $this->assertGreaterThan(0, $rowset->ncols);
         $this->assertSame("AlbumId", $rowset->name(0));
-
-        $sqlite->disconnect();
     }
 }

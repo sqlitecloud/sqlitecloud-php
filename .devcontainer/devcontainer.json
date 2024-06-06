@@ -4,7 +4,7 @@
 	"name": "PHP",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"build": {
-		"dockerfile": "Dockerfile" 
+		"dockerfile": "Dockerfile"
 	},
 
 	// Configure tool-specific properties.
@@ -12,8 +12,12 @@
 		"vscode": {
 			"extensions": [
 				"brapifra.phpserver",
-				"emallin.phpunit",
-				"eamodio.gitlens"
+				"eamodio.gitlens",
+				"junstyle.php-cs-fixer",
+				"hbenl.vscode-test-explorer",
+				"renandelmonico.vscode-php-test-explorer",
+				"xdebug.php-debug",
+				"bmewburn.vscode-intelephense-client"
 			]
 		}
 	},
@@ -25,7 +29,7 @@
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "sudo chmod a+x \"$(pwd)\" && sudo rm -rf /var/www/html && sudo ln -s \"$(pwd)\" /var/www/html",
-	
+
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
 		"ghcr.io/warrenbuckley/codespace-features/sqlite:1": {}
