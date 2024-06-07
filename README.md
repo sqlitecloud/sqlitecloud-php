@@ -18,7 +18,7 @@
 
 ---
 
-[SQLite Cloud](https://sqlitecloud.io) is a powerful Python package that allows you to interact with the SQLite Cloud database seamlessly. It provides methods for various database operations. This package is designed to simplify database operations in PHP applications, making it easier than ever to work with SQLite Cloud.
+[SQLite Cloud](https://sqlitecloud.io) is a powerful PHP package that allows you to interact with the SQLite Cloud database seamlessly. It provides methods for various database operations. This package is designed to simplify database operations in PHP applications, making it easier than ever to work with SQLite Cloud.
 
 
 - Documentation: [https://docs.sqlitecloud.io/docs/sdk/php](https://docs.sqlitecloud.io/docs/sdk/php/connect)
