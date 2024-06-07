@@ -1,6 +1,6 @@
 {
     "name": "sqlitecloud/sqlitecloud",
-    "description": "A Python package for working with SQLite databases in the cloud.",
+    "description": "A PHP package for working with SQLite databases in the cloud.",
     "type": "library",
     "license": "MIT",
     "keywords": [
