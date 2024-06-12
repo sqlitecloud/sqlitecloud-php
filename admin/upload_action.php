@@ -26,11 +26,6 @@ function do_upload_loop()
     } else {
         echo 0;
     }
-
-    // DEBUG CODE
-    // $fp = fopen('/Users/marco/Desktop/lidn.txt', ($start == 0) ? 'w' : 'a');
-    // fwrite($fp, $chunk);
-    // fclose($fp);
 }
 
 function do_upload_start()

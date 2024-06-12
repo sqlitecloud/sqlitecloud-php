@@ -50,7 +50,7 @@ form.addEventListener('submit', function(event) {
 
 async function postData(data) {
 	try {
-		const response = await fetch ('/console_action.php', {
+		const response = await fetch ('./console_action.php', {
 				method: 'POST',
 				body: JSON.stringify(data)
 			}

@@ -32,4 +32,5 @@ repos:
         - --runtime-set
         - ignore_warnings_on_exit 1
         - --ignore=^admin/.*$
+        files: \.php$
         require_serial: true

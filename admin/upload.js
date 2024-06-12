@@ -46,7 +46,7 @@ function uploadStart(file, key, size, chunkSize) {
 	if (enableLogging) console.log("reqcount: " + reqcount);
 
 	var xhr = new XMLHttpRequest();
-	xhr.open('POST', '/upload_action.php', false);
+	xhr.open('POST', './upload_action.php', false);
 	xhr.setRequestHeader("Connection", "keep-alive");
 	xhr.setRequestHeader("Keep-Alive", "timeout=15, max=" + reqcount + "\"");
 	xhr.send(formdata);
@@ -63,13 +63,13 @@ function uploadEnd() {
 	formdata.append('action', 2);		// END
 
 	var xhr = new XMLHttpRequest();
-	xhr.open('POST', '/upload_action.php', false);
+	xhr.open('POST', './upload_action.php', false);
 	xhr.send(formdata);
 
 	progressSet(100);
 	displayMessage("Database succesfully uploaded.");
 
-	setTimeout(() => {location.href = '/databases.php';}, 500);
+	setTimeout(() => {location.href = './databases.php';}, 500);
 	return true;
 }
 
@@ -82,7 +82,7 @@ function uploadAbort() {
 	formdata.append('action', 666);		// ABORT
 
 	var xhr = new XMLHttpRequest();
-	xhr.open('POST', '/upload_action.php', false);
+	xhr.open('POST', './upload_action.php', false);
 	xhr.send(formdata);
 
 	return true;
@@ -129,7 +129,7 @@ function uploadLoop (file, start, end, size) {
 		formdata.append('encoding', 1);					// 1 -> base64, 2 -> binary
 
 		// post data
-		xhr.open('POST', '/upload_action.php', true);
+		xhr.open('POST', './upload_action.php', true);
 		xhr.send(formdata);
 	}
 	reader.readAsDataURL(chunk);
