@@ -23,13 +23,13 @@ form.addEventListener('submit', function(event) {
 		  div.style.display = "block";
 		  return;
 	  }
-	  location.href = '/index.php';
+	  location.href = './index.php';
 	});
 });
 
 async function postData(data) {
 	try {
-		const response = await fetch ('/login_action.php', {
+		const response = await fetch ('./login_action.php', {
 				method: 'POST',
 				body: JSON.stringify(data)
 			}
