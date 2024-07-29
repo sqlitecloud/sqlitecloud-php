@@ -1,4 +1,4 @@
-<?php include_once('include/header.php'); ?>
+<?php include_once(__DIR__ . '/include/header.php'); ?>
 
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
 
@@ -34,4 +34,4 @@
     global $jsinclude;
 $jsinclude = "console.js";
 ?>
-<?php include_once('include/footer.php'); ?>
+<?php include_once(__DIR__ . '/include/footer.php'); ?>

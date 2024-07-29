@@ -1,13 +1,13 @@
 {
+  "version": 2,
   "builds": [
     {
       "src": "admin/**/*.php",
-      "use": "vercel-php@0.3.6",
-      "config": {
-        "includeFiles": [
-          "admin/**/*"
-        ]
-      }
+      "use": "vercel-php@0.3.6"
+    },
+    {
+      "src": "admin/**/*",
+      "use": "@vercel/static"
     }
   ],
   "routes": [

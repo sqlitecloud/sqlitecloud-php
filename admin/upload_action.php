@@ -1,7 +1,7 @@
 <?php
 
-include_once('auth.php');
-include_once('common.php');
+include_once(__DIR__ . '/auth.php');
+include_once(__DIR__ . '/common.php');
 
 function do_upload_loop()
 {

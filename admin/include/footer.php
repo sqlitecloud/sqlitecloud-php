@@ -10,16 +10,16 @@
 	  <script src="dashboard.js"></script>
 	  <?php
             global $jscript;
-	  global $jsinclude;
+      global $jsinclude;
 
-	  if (isset($jscript)) {
-	      echo '<script>' . $jscript . '</script>';
-	  }
-	  if (isset($jsinclude)) {
-	      echo '<script src="' . $jsinclude . '"></script>';
-	  }
-	  echo "\n";
-	  ?>
+      if (isset($jscript)) {
+          echo '<script>' . $jscript . '</script>';
+      }
+      if (isset($jsinclude)) {
+          echo '<script src="' . $jsinclude . '"></script>';
+      }
+      echo "\n";
+      ?>
   </body>
 </html>
 

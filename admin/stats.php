@@ -1,4 +1,4 @@
-<?php include_once('include/header.php'); ?>
+<?php include_once(__DIR__ . '/include/header.php'); ?>
 
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
     <?php $rs = query_liststats(); ?>
@@ -34,4 +34,4 @@ $script4 = render_chart_js($rs, 'cpuLoad', 'CPU_LOAD');
 $jscript = $script1 . "\n" . $script2 . "\n" . $script3 . "\n" . $script4 . "\n";
 ?>
 
-<?php include_once('include/footer.php'); ?>
+<?php include_once(__DIR__ . '/include/footer.php'); ?>
