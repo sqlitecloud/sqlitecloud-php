@@ -168,7 +168,7 @@ function exec_uploaddatabase($dbname, $key)
 {
     global $sqlitecloud;
     $sqlitecloud = do_check_connect();
-    $command = ($key) ? "UPLOAD DATABASE '${dbname}' KEY '{$key}';" : "UPLOAD DATABASE '{$dbname}';";
+    $command = ($key) ? "UPLOAD DATABASE '{$dbname}' KEY '{$key}';" : "UPLOAD DATABASE '{$dbname}';";
     return $sqlitecloud->execute($command);
 }
 
